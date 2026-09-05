@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Tell Tailwind where to look for class names. Paths are relative to this file. */
+@source "../views";
+@source "../routes";
+@source "../public/javascripts";
+
+/* Custom theme values become utilities: font-bbh, etc. */
+@theme {
+  --font-bbh: "BBH Bartle", sans-serif;
+}
