@@ -11,3 +11,133 @@
   font-weight: 400;
   font-style: normal;
 }
+
+/* ---------------------------------------------------------------- US map */
+
+.us-map {
+  margin: 0;
+}
+
+.us-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: manipulation; /* drop the double-tap zoom delay on touch */
+}
+
+/* --us-map-fill is the hook for data-driven colouring: set it per state and
+   hover/selection still win, because they set fill directly. */
+.us-map__shape {
+  fill: var(--us-map-fill, #e2e8f0);
+  stroke: #f8fafc;
+  stroke-width: 1;
+  stroke-linejoin: round;
+  transition: fill 120ms ease-out;
+}
+
+.us-map__label {
+  font-size: 12px;
+  font-weight: 600;
+  fill: #475569;
+  pointer-events: none; /* a tap on the label falls through to the state */
+  transition: fill 120ms ease-out;
+}
+
+.us-map__rail-title {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  fill: #94a3b8;
+}
+
+.us-map__chip-box {
+  fill: var(--us-map-fill, #e2e8f0);
+  stroke: #f8fafc;
+  stroke-width: 1;
+  transition: fill 120ms ease-out;
+}
+
+.us-map__chip-label {
+  font-size: 13px;
+  font-weight: 600;
+  fill: #475569;
+  pointer-events: none;
+  transition: fill 120ms ease-out;
+}
+
+/* A state that does something on click. States configured as inert keep the
+   default cursor and none of the feedback below. */
+.us-map__hit:not(.is-static),
+.us-map__chip:not(.is-static) {
+  cursor: pointer;
+}
+
+.us-map__hit:not(.is-static):hover .us-map__shape,
+.us-map__hit.is-active:not(.is-static) .us-map__shape,
+.us-map__hit:focus-visible .us-map__shape,
+.us-map__chip:not(.is-static):hover .us-map__chip-box,
+.us-map__chip.is-active:not(.is-static) .us-map__chip-box,
+.us-map__chip:focus-visible .us-map__chip-box {
+  fill: #0284c7;
+}
+
+.us-map__chip:not(.is-static):hover .us-map__chip-label,
+.us-map__chip.is-active:not(.is-static) .us-map__chip-label,
+.us-map__chip:focus-visible .us-map__chip-label {
+  fill: #ffffff;
+}
+
+/* Labels are not children of the state they belong to, so the component
+   marks them directly rather than inheriting a :hover from the shape. */
+.us-map__label.is-active {
+  fill: #ffffff;
+}
+
+/* Selection outlives hover, so it reads darker than the hover fill. */
+.us-map__hit.is-selected .us-map__shape,
+.us-map__chip.is-selected .us-map__chip-box {
+  fill: #0369a1;
+  stroke: #ffffff;
+}
+
+.us-map__label.is-selected,
+.us-map__chip.is-selected .us-map__chip-label {
+  fill: #ffffff;
+}
+
+.us-map__hit:focus-visible .us-map__shape,
+.us-map__chip:focus-visible .us-map__chip-box {
+  stroke: #0c4a6e;
+  stroke-width: 2;
+}
+
+.us-map__hit.is-static .us-map__shape,
+.us-map__chip.is-static .us-map__chip-box {
+  fill: #f1f5f9;
+}
+
+.us-map__caption {
+  padding-top: 0.5rem;
+  color: #475569;
+}
+
+/* On a narrow screen the states shrink below a usable tap size, so let the
+   map scroll sideways at a readable width instead. */
+@media (max-width: 640px) {
+  .us-map {
+    overflow-x: auto;
+  }
+
+  .us-map__svg {
+    min-width: 560px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .us-map__shape,
+  .us-map__label,
+  .us-map__chip-box,
+  .us-map__chip-label {
+    transition: none;
+  }
+}

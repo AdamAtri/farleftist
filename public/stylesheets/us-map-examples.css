@@ -1,0 +1,250 @@
+/*
+ * Styling for the worked examples in public/javascripts/us-map-examples.js.
+ * Kept out of style.css because none of it is needed by the map itself.
+ */
+
+.us-map {
+  position: relative; /* popovers and dialogs position against the map */
+}
+
+/* --------------------------------------------------------------- popover */
+
+.us-map-popover {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, calc(-100% - 8px));
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  pointer-events: none; /* never swallow a click meant for the map */
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.us-map-popover.is-visible {
+  opacity: 1;
+}
+
+/* ----------------------------------------------------------------- panel */
+
+.us-map-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  width: min(20rem, 85vw);
+  height: 100%;
+  padding: 1.25rem;
+  background: #ffffff;
+  border-left: 1px solid #e2e8f0;
+  box-shadow: -8px 0 24px rgba(15, 23, 42, 0.08);
+  transform: translateX(100%);
+  transition: transform 200ms ease-out;
+  overflow-y: auto;
+}
+
+.us-map-panel.is-open {
+  transform: translateX(0);
+}
+
+.us-map-panel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.us-map-panel__title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.us-map-panel__close {
+  border: 0;
+  background: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.us-map-panel__loading {
+  color: #94a3b8;
+}
+
+.us-map-panel__list {
+  margin: 1rem 0 0;
+}
+
+.us-map-panel__list dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+.us-map-panel__list dd {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+}
+
+/* ----------------------------------------------------------------- pulse */
+
+.us-map-pulse {
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- legend */
+
+.us-map-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.us-map-legend__swatch {
+  width: 1.5rem;
+  height: 0.75rem;
+  border-radius: 2px;
+}
+
+.us-map-legend__label {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* --------------------------------------------------------------- confirm */
+
+.us-map-confirm {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, 8px);
+  width: 14rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  display: none;
+}
+
+.us-map-confirm.is-visible {
+  display: block;
+}
+
+.us-map-confirm__text {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: #0f172a;
+}
+
+.us-map-confirm__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.us-map-confirm__go,
+.us-map-confirm__cancel {
+  flex: 1;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.us-map-confirm__go {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------- summary */
+
+.us-map-summary__empty {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.us-map-summary__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.us-map-summary__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0c4a6e;
+  font-size: 0.8rem;
+}
+
+.us-map-summary__remove,
+.us-map-summary__clear {
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.us-map-summary__clear {
+  font-size: 0.8rem;
+  color: #0284c7;
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------- demo shell */
+
+.demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.demo-toggle {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.demo-toggle[aria-pressed="true"] {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+}
+
+.demo-aside {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-top: 1rem;
+  min-height: 4rem;
+}
+
+.demo-note {
+  max-width: 34rem;
+  color: #475569;
+  font-size: 0.9rem;
+}

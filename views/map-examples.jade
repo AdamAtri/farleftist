@@ -1,0 +1,86 @@
+extends layout
+
+block head
+  link(rel="stylesheet" href="/stylesheets/us-map-examples.css")
+  script(src="/javascripts/us-map-examples.js" defer)
+
+block content
+  include us-map
+
+  div(id="app")
+    div(id="nav" class="bbh-reg pt-8 pb-4")
+      h1(class="text-5xl text-sky-600 break-words")= title
+
+    p(class="demo-note") Each button switches one example on or off. They all read the same map through its public API, so they stack: hover for a popover, click for a ripple, a panel and a selection, and the four linked states (CA, TX, NY, FL) ask before they open.
+
+    div(class="demo-toolbar")
+      button(type="button" class="demo-toggle" data-demo="popover" aria-pressed="true") Popover
+      button(type="button" class="demo-toggle" data-demo="pulse" aria-pressed="true") Pulse
+      button(type="button" class="demo-toggle" data-demo="panel" aria-pressed="true") Detail panel
+      button(type="button" class="demo-toggle" data-demo="summary" aria-pressed="true") Selection summary
+      button(type="button" class="demo-toggle" data-demo="confirm" aria-pressed="true") Confirm links
+      button(type="button" class="demo-toggle" data-demo="choropleth" aria-pressed="false") Choropleth
+      button(type="button" class="demo-toggle" data-demo="zoom" aria-pressed="false") Zoom to state
+      button(type="button" class="demo-toggle" id="tour" aria-pressed="false") Run tour
+
+    +usMap(map)
+
+    div(class="demo-aside")
+      div(id="summary")
+      div(id="legend" class="us-map-legend")
+
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      var map = USMap.init(document.querySelector('[data-us-map]'));
+      var examples = window.USMapExamples;
+
+      // The values the server put in the map config drive the choropleth.
+      var values = {};
+      Object.keys(map.states).forEach(function(code) {
+        if (map.states[code].value !== null) values[code] = map.states[code].value;
+      });
+
+      var start = {
+        popover: function() { return examples.popover(map); },
+        pulse: function() { return examples.pulse(map); },
+        panel: function() { return examples.detailPanel(map, { container: document.body }); },
+        summary: function() { return examples.selectionSummary(map, { container: document.getElementById('summary') }); },
+        confirm: function() { return examples.confirmLinks(map); },
+        choropleth: function() { return examples.choropleth(map, { values: values, legend: document.getElementById('legend') }); },
+        zoom: function() { return examples.zoomTo(map); }
+      };
+
+      var running = {};
+
+      function toggle(name, on) {
+        if (on && !running[name]) running[name] = start[name]();
+        else if (!on && running[name]) { running[name](); delete running[name]; }
+      }
+
+      Array.prototype.forEach.call(document.querySelectorAll('.demo-toggle[data-demo]'), function(button) {
+        var name = button.getAttribute('data-demo');
+        toggle(name, button.getAttribute('aria-pressed') === 'true');
+
+        button.addEventListener('click', function() {
+          var on = button.getAttribute('aria-pressed') !== 'true';
+          button.setAttribute('aria-pressed', on ? 'true' : 'false');
+          toggle(name, on);
+        });
+      });
+
+      var tourButton = document.getElementById('tour');
+      var stopTour = null;
+
+      tourButton.addEventListener('click', function() {
+        if (stopTour) { stopTour(); return; }
+
+        tourButton.setAttribute('aria-pressed', 'true');
+        stopTour = examples.tour(map, ['CA', 'TX', 'FL', 'NY', 'IL', 'PA', 'OH', 'GA'], {
+          interval: 800,
+          onStop: function() {
+            stopTour = null;
+            tourButton.setAttribute('aria-pressed', 'false');
+          }
+        });
+      });
+    });

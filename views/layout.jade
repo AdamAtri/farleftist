@@ -2,10 +2,13 @@ doctype html
 html
   head
     title= title
+    meta(name="viewport" content="width=device-width, initial-scale=1")
     link(rel='stylesheet', href='/stylesheets/tailwind.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src="https://apis.google.com/js/platform.js" async defer)
     meta(name="google-signin-client_id" content="486494226986-bn930u3k809r58hmtbmqdqq23v9bpfjd.apps.googleusercontent.com")
+    script(src="/javascripts/us-map.js" defer)
+    block head
 
   body
     block content

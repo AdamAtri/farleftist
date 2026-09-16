@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  include us-map
+
   div(id="app")
     div(id="nav" class="bbh-reg pt-16 pb-8")
       h1(class="text-7xl text-sky-600 break-words")= title
@@ -8,4 +10,5 @@ block content
       //-   a(class="text-sky-700 p-8" href="/") Home
       //-   a(class="text-sky-700 p-8" href="/about") About
       //-   a(class="text-sky-700 p-8" href="/contact") Contact
-    div(id="main" )
+    div(id="main")
+      +usMap(map)

@@ -1,0 +1,52 @@
+//- Clickable map of the U.S.
+//-
+//-   +usMap(map)   where map came from lib/us-map.js build()
+//-
+//- A state renders as whatever its config made it: a real anchor when it has
+//- an href, a keyboard-operable button when something is listening, or an
+//- inert shape. Links work with no JavaScript at all. Small states move to
+//- the rail on the right, where they get a tap target big enough for a phone.
+
+//- Wraps one state in the right element for its kind.
+mixin usMapHit(state, className)
+  if state.kind === 'link'
+    a(class=className href=state.href data-state=state.code target=state.target rel=state.rel aria-label=state.title)
+      title= state.title
+      block
+  else if state.kind === 'button'
+    g(class=className data-state=state.code role="button" tabindex="0" aria-label=state.title)
+      title= state.title
+      block
+  else
+    g(class=className + " is-static" data-state=state.code)
+      title= state.title
+      block
+
+mixin usMap(map)
+  figure(class="us-map" data-us-map=map.id)
+    script(type="application/json" data-us-map-config=map.id)!= map.configJson
+
+    svg(class="us-map__svg" viewBox="0 0 1060 610" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Map of the United States")
+      g(class="us-map__shapes")
+        each state in map.states
+          +usMapHit(state, 'us-map__hit')
+            path(class="us-map__shape" d=state.d)
+
+      //- Labels sit above the shapes and ignore pointer events, so a tap on a
+      //- label still lands on the state underneath it.
+      g(class="us-map__labels" aria-hidden="true")
+        each state in map.states
+          if state.chipOrder === null && state.label
+            text(class="us-map__label" data-state=state.code x=state.labelX y=state.labelY text-anchor="middle" dominant-baseline="central")= state.label
+
+      if map.chips.length
+        g(class="us-map__rail" transform="translate(985 132)")
+          each line, i in map.railTitle
+            text(class="us-map__rail-title" x="31" y=i * 12 - 26 text-anchor="middle" aria-hidden="true")= line
+          each chip, i in map.chips
+            +usMapHit(chip, 'us-map__chip')
+              rect(class="us-map__chip-box" x="0" y=i * 32 width="62" height="26" rx="5")
+              text(class="us-map__chip-label" x="31" y=i * 32 + 13 text-anchor="middle" dominant-baseline="central")= chip.code
+
+    if map.caption
+      figcaption(class="us-map__caption")= map.caption
